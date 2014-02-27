@@ -10,6 +10,8 @@
 
 #import "AppDelegate.h"
 
+static NSString const *name = @"iOS Simulator";
+
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
@@ -23,27 +25,52 @@
   // Pass-through mouse events.
   _window.ignoresMouseEvents = YES;
 
-  [NSTimer scheduledTimerWithTimeInterval:0.25f
+  [self bringTargetWindowToFront];
+
+  [NSTimer scheduledTimerWithTimeInterval:0.1f
                                    target:self
-                                 selector:@selector(updateWindowFrame)
+                                 selector:@selector(trackTargetWindowFrame)
                                  userInfo:nil
                                   repeats:YES];
 }
 
-- (void)updateWindowFrame {
-	CFArrayRef windowList = CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements | kCGWindowListOptionOnScreenOnly, kCGNullWindowID);
-  NSArray *windows = (__bridge_transfer NSArray *)windowList;
+- (NSDictionary *)targetWindowInfo {
+	NSArray *windows = (__bridge_transfer NSArray *)CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements, kCGNullWindowID);
 
   NSDictionary *entry = [windows rx_detectWithBlock:^BOOL(NSDictionary *entry) {
-		NSString *applicationName = [entry objectForKey:(id)kCGWindowOwnerName];
-    return [applicationName isEqualToString:@"iOS Simulator"];
+		NSString *windowName = [entry objectForKey:(id)kCGWindowName];
+    return [windowName hasPrefix:(id)name];
   }];
+
+  return entry;
+}
+
+- (CGRect)convertScreenToView:(CGRect)rect {
+  CGRect newRect = CGRectInset(rect, 0, 0);
+
+  // Convert from screen space to view space.
+  newRect.origin.y = [NSScreen mainScreen].frame.size.height - newRect.origin.y - newRect.size.height;
+
+  // XXX: Ignore title bar. We don't always need to do this.
+  newRect.size.height -= 22;
+
+  return newRect;
+}
+
+- (void)bringTargetWindowToFront {
+  NSDictionary *entry = [self targetWindowInfo];
+  pid_t pid = (pid_t)[[entry objectForKey:(id)kCGWindowOwnerPID] integerValue];
+  NSRunningApplication *runningApplication = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+  [runningApplication activateWithOptions:NSApplicationActivateIgnoringOtherApps];
+}
+
+- (void)trackTargetWindowFrame {
+  NSDictionary *entry = [self targetWindowInfo];
 
   CGRect bounds;
   CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)[entry objectForKey:(id)kCGWindowBounds], &bounds);
-  bounds.origin.y = [NSScreen mainScreen].frame.size.height - bounds.origin.y - bounds.size.height;
-  bounds.size.height -= 22;
-  [_window setFrame:bounds display:YES];
+
+  [_window setFrame:[self convertScreenToView:bounds] display:YES];
 }
 
 @end
