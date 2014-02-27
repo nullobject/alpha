@@ -18,7 +18,6 @@
 		0379DE7518BB099D009E88E7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0379DE5418BB099D009E88E7 /* Cocoa.framework */; };
 		0379DE7D18BB099D009E88E7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0379DE7B18BB099D009E88E7 /* InfoPlist.strings */; };
 		0379DE7F18BB099D009E88E7 /* AlphaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0379DE7E18BB099D009E88E7 /* AlphaTests.m */; };
-		0379DE9018BC555D009E88E7 /* lockscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 0379DE8F18BC555D009E88E7 /* lockscreen.png */; };
 		22D9B253A2F64785ADC4CC14 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DB6B67EA05F4BE8BF70848A /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -52,7 +51,6 @@
 		0379DE7A18BB099D009E88E7 /* AlphaTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AlphaTests-Info.plist"; sourceTree = "<group>"; };
 		0379DE7C18BB099D009E88E7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0379DE7E18BB099D009E88E7 /* AlphaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AlphaTests.m; sourceTree = "<group>"; };
-		0379DE8F18BC555D009E88E7 /* lockscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lockscreen.png; sourceTree = "<group>"; };
 		5DB6B67EA05F4BE8BF70848A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF0837B53EB64EDE967A0BB0 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,7 +133,6 @@
 		0379DE5B18BB099D009E88E7 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				0379DE8F18BC555D009E88E7 /* lockscreen.png */,
 				0379DE5C18BB099D009E88E7 /* Alpha-Info.plist */,
 				0379DE5D18BB099D009E88E7 /* InfoPlist.strings */,
 				0379DE6018BB099D009E88E7 /* main.m */,
@@ -241,7 +238,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0379DE9018BC555D009E88E7 /* lockscreen.png in Resources */,
 				0379DE5F18BB099D009E88E7 /* InfoPlist.strings in Resources */,
 				0379DE6D18BB099D009E88E7 /* Images.xcassets in Resources */,
 				0379DE6518BB099D009E88E7 /* Credits.rtf in Resources */,

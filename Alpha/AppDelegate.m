@@ -10,7 +10,7 @@
 
 #import "AppDelegate.h"
 
-static NSString const *name = @"iOS Simulator";
+static NSString const *targetWindowName = @"iOS Simulator";
 
 @implementation AppDelegate
 
@@ -18,11 +18,13 @@ static NSString const *name = @"iOS Simulator";
   // Ensure the window is always on top.
   _window.level = NSFloatingWindowLevel;
 
+  // Change the window alpha value so that it blends with the target window.
   _window.alphaValue = 0.5f;
-//  _window.backgroundColor = [NSColor clearColor];
-  _window.backgroundColor = [NSColor greenColor];
 
-  // Pass-through mouse events.
+  // Make the window background to transparent.
+  _window.backgroundColor = [NSColor clearColor];
+
+  // Ensure mouse events are passed through to the target window.
   _window.ignoresMouseEvents = YES;
 
   [self bringTargetWindowToFront];
@@ -34,27 +36,56 @@ static NSString const *name = @"iOS Simulator";
                                   repeats:YES];
 }
 
+#pragma mark - Handlers
+
+- (void)openDocument:(id)sender {
+  _window.level = NSNormalWindowLevel;
+
+  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+
+  NSArray *imageTypes = [NSImage imageTypes];
+  [openPanel setAllowedFileTypes:imageTypes];
+
+  [openPanel beginWithCompletionHandler:^(NSInteger result) {
+    if (result == NSFileHandlingPanelOKButton) {
+      [self openImageWithContentsOfURL:openPanel.URL];
+    }
+
+    _window.level = NSFloatingWindowLevel;
+  }];
+}
+
+- (void)performClose:(id)sender {
+  _imageView.image = nil;
+}
+
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
+  return [self openImageWithContentsOfURL:[NSURL fileURLWithPath:filename]];
+}
+
+#pragma mark - Private methods
+
 - (NSDictionary *)targetWindowInfo {
 	NSArray *windows = (__bridge_transfer NSArray *)CGWindowListCopyWindowInfo(kCGWindowListExcludeDesktopElements, kCGNullWindowID);
 
   NSDictionary *entry = [windows rx_detectWithBlock:^BOOL(NSDictionary *entry) {
 		NSString *windowName = [entry objectForKey:(id)kCGWindowName];
-    return [windowName hasPrefix:(id)name];
+    return [windowName hasPrefix:(id)targetWindowName];
   }];
 
   return entry;
 }
 
-- (CGRect)convertScreenToView:(CGRect)rect {
-  CGRect newRect = CGRectInset(rect, 0, 0);
+- (CGRect)convertScreenToWindow:(CGRect)aRect {
+  CGRect frame = CGRectInset(aRect, 0, 0);
 
   // Convert from screen space to view space.
-  newRect.origin.y = [NSScreen mainScreen].frame.size.height - newRect.origin.y - newRect.size.height;
+  frame.origin.y = [NSScreen mainScreen].frame.size.height - aRect.origin.y - aRect.size.height;
 
   // XXX: Ignore title bar. We don't always need to do this.
-  newRect.size.height -= 22;
+  frame.size.height -= 22;
 
-  return newRect;
+  return frame;
 }
 
 - (void)bringTargetWindowToFront {
@@ -70,7 +101,19 @@ static NSString const *name = @"iOS Simulator";
   CGRect bounds;
   CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)[entry objectForKey:(id)kCGWindowBounds], &bounds);
 
-  [_window setFrame:[self convertScreenToView:bounds] display:YES];
+  [_window setFrame:[self convertScreenToWindow:bounds] display:YES];
+}
+
+- (BOOL)openImageWithContentsOfURL:(NSURL *)URL {
+  NSImage *image = [[NSImage alloc] initWithContentsOfURL:URL];
+
+  if (image) {
+    _imageView.image = image;
+    [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:URL];
+    return YES;
+  } else {
+    return NO;
+  }
 }
 
 @end

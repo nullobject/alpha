@@ -96,6 +96,7 @@
         </menu>
         <customObject id="494" customClass="AppDelegate">
             <connections>
+                <outlet property="imageView" destination="wX5-JW-wah" id="v9w-rX-SgO"/>
                 <outlet property="window" destination="Z8Z-K2-TMO" id="11a-KY-k6A"/>
             </connections>
         </customObject>
@@ -103,7 +104,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="Z8Z-K2-TMO">
             <windowStyleMask key="styleMask" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="458" y="663" width="320" height="568"/>
+            <rect key="contentRect" x="0.0" y="0.0" width="320" height="568"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <value key="minSize" type="size" width="320" height="568"/>
             <value key="maxSize" type="size" width="320" height="568"/>
@@ -114,13 +115,10 @@
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="wX5-JW-wah">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="lockscreen" id="bxm-6H-rEG"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="bxm-6H-rEG"/>
                     </imageView>
                 </subviews>
             </view>
         </window>
     </objects>
-    <resources>
-        <image name="lockscreen" width="640" height="1136"/>
-    </resources>
 </document>
